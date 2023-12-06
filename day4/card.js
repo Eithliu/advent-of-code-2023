@@ -202,29 +202,31 @@ Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11`;
 
 
 const compareArrays = (array1, array2) =>{
-    let sum = 1;
-    let add = 0;
+    let sum = 0;
     for (let i = 0; i < array2.length; i++) {
         const isIdentical = array1.includes(array2[i])
         if (isIdentical) {
-            sum = sum * 2;
-            console.log(sum);
+            sum++;
         }
     }
+    return sum;
 }
 
 
 (function cleanData(data) {
     const lines = data.split('\n');
-    lines.map((line) => {
+    const result = lines.flatMap((line) => {
         const linesWithoutCard = line.split(': ').slice(1);
-        linesWithoutCard.map((lineWithoutCard) => {
+        return linesWithoutCard.map((lineWithoutCard) => {
             const [winning, myNum] = lineWithoutCard.split(' | ').map((string) => {
                 return string.split(' ').filter((a) => a);
             });
             const result = compareArrays(winning, myNum);
-            console.log(result);
+            return Math.floor(2**(result - 1));
         })
-    })
+    }).reduce((acc, current) => {
+        return acc + current;
+    }, 0)
+    console.log(result);
 })(data);
 
